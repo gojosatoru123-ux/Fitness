@@ -29,7 +29,9 @@ export const ProgressRing: React.FC<ProgressRingProps> = ({
 
   const animatedProps = useAnimatedProps(() => {
     return {
-      strokeDashoffset: withTiming(circumference * (1 - progress), { duration: 1000 }),
+      strokeDashoffset: withTiming(circumference * (1 - progress), {
+        duration: 1000,
+      }),
     };
   });
 
@@ -43,6 +45,7 @@ export const ProgressRing: React.FC<ProgressRingProps> = ({
           stroke={backgroundColor}
           strokeWidth={strokeWidth}
           fill="none"
+          strokeLinecap="round"
         />
         <AnimatedCircle
           cx={halfSize}
@@ -58,7 +61,9 @@ export const ProgressRing: React.FC<ProgressRingProps> = ({
           origin={`${halfSize}, ${halfSize}`}
         />
       </Svg>
-      <View style={StyleSheet.absoluteFill}>{children}</View>
+      <View style={[StyleSheet.absoluteFill, { justifyContent: 'center', alignItems: 'center' }]}>
+        {children}
+      </View>
     </View>
   );
 };

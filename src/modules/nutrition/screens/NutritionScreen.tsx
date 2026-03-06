@@ -4,53 +4,67 @@ import { Text } from '../../../components/common/Text';
 import { Card } from '../../../components/common/Card';
 import { ProgressRing } from '../../../components/common/ProgressRing';
 import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS } from '../../../constants/theme';
-import { Plus, Search, ChevronRight, X, Coffee, Utensils, Moon, Candy } from 'lucide-react-native';
-import { useHealthStore, FoodEntry } from '../../../store/healthStore';
+import { Plus, Search, ChevronRight, X, Coffee, Utensils, Moon, Candy, Droplet } from 'lucide-react-native';
+import { useHealthStore, FoodEntry, WaterEntry } from '../../../store/healthStore';
 import { useUserStore } from '../../../store/userStore';
+import { searchFood, FoodItem } from '../../../services/nutritionService';
 
 export const NutritionScreen: React.FC = () => {
   const [searchModalVisible, setSearchModalVisible] = useState(false);
   const [activeMealType, setActiveMealType] = useState<'breakfast' | 'lunch' | 'dinner' | 'snack'>('breakfast');
   const [searchQuery, setSearchQuery] = useState('');
-  
-  const { foodEntries, addFood, getDailyCalories, getDailyMacros } = useHealthStore();
+  const [searchResults, setSearchResults] = useState<FoodItem[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const { foodEntries, waterEntries, addFood, addWater, getDailyCalories, getDailyMacros, getDailyWater } = useHealthStore();
   const { getCalorieGoal } = useUserStore();
 
   const today = new Date().toISOString().split('T')[0];
   const caloriesConsumed = getDailyCalories(today);
-  const calorieGoal = getCalorieGoal() || 2500;
+  const calorieGoal = Math.round(getCalorieGoal() || 2500);
   const remainingCalories = Math.max(0, calorieGoal - caloriesConsumed);
   const macros = getDailyMacros(today);
+  const waterIntake = getDailyWater(today);
+  const waterGoal = 2500; // ml
 
-  const mealTypes = [
-    { id: 'breakfast', label: 'Breakfast', icon: Coffee },
-    { id: 'lunch', label: 'Lunch', icon: Utensils },
-    { id: 'dinner', label: 'Dinner', icon: Moon },
-    { id: 'snack', label: 'Snacks', icon: Candy },
-  ];
+  const handleSearch = async (query: string) => {
+    setSearchQuery(query);
+    if (query.length > 2) {
+      setLoading(true);
+      const results = await searchFood(query);
+      setSearchResults(results);
+      setLoading(false);
+    } else {
+      setSearchResults([]);
+    }
+  };
 
-  const handleAddFood = (food: Partial<FoodEntry>) => {
+  const handleAddFood = (food: FoodItem) => {
     const newEntry: FoodEntry = {
       id: Math.random().toString(),
       date: new Date().toISOString(),
-      name: food.name || 'Food',
+      name: food.name,
       type: activeMealType,
-      calories: food.calories || 0,
-      protein: food.protein || 0,
-      carbs: food.carbs || 0,
-      fat: food.fat || 0,
-      quantity: '1 serving',
+      calories: food.calories,
+      protein: food.protein,
+      carbs: food.carbs,
+      fat: food.fat,
+      quantity: food.servingSize || '1 serving',
     };
     addFood(newEntry);
     setSearchModalVisible(false);
+    setSearchQuery('');
+    setSearchResults([]);
   };
 
-  const dummyResults = [
-    { name: 'Oatmeal', calories: 150, protein: 5, carbs: 27, fat: 3 },
-    { name: 'Chicken Breast', calories: 165, protein: 31, carbs: 0, fat: 3.6 },
-    { name: 'Banana', calories: 105, protein: 1.3, carbs: 27, fat: 0.4 },
-    { name: 'Egg (Boiled)', calories: 78, protein: 6.3, carbs: 0.6, fat: 5.3 },
-  ].filter(f => f.name.toLowerCase().includes(searchQuery.toLowerCase()));
+  const handleAddWater = (amount: number) => {
+    const newEntry: WaterEntry = {
+      id: Math.random().toString(),
+      date: new Date().toISOString(),
+      amount,
+    };
+    addWater(newEntry);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -109,6 +123,31 @@ export const NutritionScreen: React.FC = () => {
           </View>
         </Card>
 
+          {/* Water Tracking Card */}
+          <Card style={styles.waterCard}>
+            <View style={styles.waterHeader}>
+              <View style={styles.mealTitleRow}>
+                <Droplet color={COLORS.accent} size={20} />
+                <Text variant="headline" weight="600" style={{ marginLeft: SPACING.s }}>Water Intake</Text>
+              </View>
+              <Text variant="headline" weight="700" color={COLORS.accent}>{waterIntake} <Text variant="caption">/ {waterGoal} ml</Text></Text>
+            </View>
+            <View style={styles.waterButtons}>
+              <TouchableOpacity onPress={() => handleAddWater(250)} style={styles.waterBtn}>
+                <Text variant="subheadline" weight="700">+250ml</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleAddWater(500)} style={styles.waterBtn}>
+                <Text variant="subheadline" weight="700">+500ml</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleAddWater(1000)} style={[styles.waterBtn, { backgroundColor: COLORS.accent }]}>
+                <Text variant="subheadline" weight="700" color="#FFF">+1L</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.waterProgressBg}>
+              <View style={[styles.waterProgress, { width: `${Math.min(100, (waterIntake / waterGoal) * 100)}%` }]} />
+            </View>
+          </Card>
+
         {/* Meal Sections */}
         {mealTypes.map((meal) => (
           <Card key={meal.id} style={styles.mealCard}>
@@ -160,12 +199,19 @@ export const NutritionScreen: React.FC = () => {
               placeholder="Search for food..."
               style={styles.searchInput}
               value={searchQuery}
-              onChangeText={setSearchQuery}
+              onChangeText={handleSearch}
+              autoFocus
             />
           </View>
 
+          {loading && (
+            <View style={{ padding: SPACING.m, alignItems: 'center' }}>
+              <Text variant="body" color={COLORS.text.secondary.light}>Searching...</Text>
+            </View>
+          )}
+
           <FlatList
-            data={dummyResults}
+            data={searchResults}
             keyExtractor={(item) => item.name}
             contentContainerStyle={styles.resultsList}
             renderItem={({ item }) => (
@@ -244,6 +290,42 @@ const styles = StyleSheet.create({
     borderRadius: BORDER_RADIUS.xl,
     padding: SPACING.m,
     marginBottom: SPACING.m,
+  },
+  waterCard: {
+    backgroundColor: '#FFF',
+    borderRadius: BORDER_RADIUS.xl,
+    padding: SPACING.m,
+    marginBottom: SPACING.xl,
+  },
+  waterHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: SPACING.m,
+  },
+  waterButtons: {
+    flexDirection: 'row',
+    gap: SPACING.s,
+    marginBottom: SPACING.m,
+  },
+  waterBtn: {
+    flex: 1,
+    height: 44,
+    borderRadius: BORDER_RADIUS.m,
+    backgroundColor: '#F2F2F7',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  waterProgressBg: {
+    height: 8,
+    width: '100%',
+    backgroundColor: '#F2F2F7',
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  waterProgress: {
+    height: '100%',
+    backgroundColor: COLORS.accent,
   },
   mealHeader: {
     flexDirection: 'row',
