@@ -18,36 +18,39 @@ export const DashboardScreen: React.FC = () => {
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         {/* Header */}
         <View style={styles.header}>
-          <View>
+          <View style={styles.headerLeft}>
             <Image
               source={{ uri: 'https://i.pravatar.cc/150?u=anik' }}
               style={styles.avatar}
             />
-            <Text variant="h2" style={styles.welcomeText}>Hi, {profile?.name || 'Anik'}</Text>
-            <Text variant="subheadline" color={COLORS.text.secondary.light}>Your Daily Fitness Goals</Text>
+            <View style={styles.headerText}>
+              <Text variant="h2" weight="800" style={styles.welcomeText}>Hi, {profile?.name || 'Anik'}</Text>
+              <Text variant="subheadline" color={COLORS.text.secondary.light}>Your Daily Fitness Goals</Text>
+            </View>
           </View>
           <TouchableOpacity style={styles.notificationBtn}>
-            <Bell color={COLORS.text.primary.light} size={24} />
+            <Bell color="#000" size={24} />
+            <View style={styles.notificationDot} />
           </TouchableOpacity>
         </View>
 
         {/* Today's Workout Card */}
         <TouchableOpacity activeOpacity={0.9}>
           <LinearGradient
-            colors={[COLORS.card.purple, COLORS.card.orange]}
+            colors={[COLORS.card.purple, COLORS.card.purple]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.workoutCard}
           >
             <View style={styles.workoutInfo}>
-              <Text variant="headline" color="#FFFFFF">Today's Workout:</Text>
-              <Text variant="h2" color="#FFFFFF" weight="700">Full-Body HIIT</Text>
+              <Text variant="headline" color="#FFFFFF" weight="600">Today's Workout:</Text>
+              <Text variant="subheadline" color="rgba(255,255,255,0.8)">Full-Body HIIT</Text>
               <View style={styles.durationRow}>
-                <Text variant="h2" color="#FFFFFF" weight="700">30</Text>
-                <Text variant="subheadline" color="#FFFFFF" style={{ marginTop: 8, marginLeft: 4 }}>min</Text>
+                <Text style={styles.durationValue}>30</Text>
+                <Text style={styles.durationUnit}>min</Text>
               </View>
               <TouchableOpacity style={styles.startBtn}>
-                <Text variant="headline" color="#FFFFFF">Start Workout</Text>
+                <Text variant="subheadline" color="#FFFFFF" weight="600">Start Workout</Text>
               </TouchableOpacity>
             </View>
             <Image
@@ -59,39 +62,45 @@ export const DashboardScreen: React.FC = () => {
 
         {/* Stats Row */}
         <View style={styles.statsRow}>
-          <Card variant="dark" style={[styles.statCard, { backgroundColor: '#3A3A3C' }]}>
+          <Card variant="grey" style={styles.statCard}>
             <View style={styles.statHeader}>
-              <Text variant="headline" color="#FFFFFF">Steps:</Text>
+              <Text variant="headline" color="#FFFFFF" weight="600">Steps:</Text>
               <View style={styles.statIconContainer}>
                 <Footprints color="#FFFFFF" size={16} />
               </View>
             </View>
             <View style={styles.ringContainer}>
               <ProgressRing
-                size={80}
+                size={90}
                 progress={0.82}
                 color="#FFFFFF"
-                strokeWidth={8}
-                backgroundColor="rgba(255,255,255,0.2)"
+                strokeWidth={10}
+                backgroundColor="rgba(255,255,255,0.15)"
               >
                 <View style={styles.ringText}>
-                  <Text variant="headline" color="#FFFFFF">8.2k</Text>
+                  <Text variant="headline" color="#FFFFFF" weight="800">8.2k</Text>
                   <Text variant="caption" color="rgba(255,255,255,0.6)">10k</Text>
                 </View>
               </ProgressRing>
             </View>
           </Card>
 
-          <Card variant="dark" style={[styles.statCard, { backgroundColor: COLORS.primary }]}>
+          <Card variant="orange" style={styles.statCard}>
             <View style={styles.statHeader}>
-              <Text variant="headline" color="#FFFFFF">Minutes:</Text>
+              <Text variant="headline" color="#FFFFFF" weight="600">Minutes:</Text>
               <View style={styles.statIconContainer}>
                 <Clock color="#FFFFFF" size={16} />
               </View>
             </View>
             <View style={styles.minutesContent}>
-              <Text variant="h2" color="#FFFFFF" weight="700">127 <Text variant="subheadline" color="#FFFFFF">min</Text></Text>
-              <View style={styles.sparkline} /> 
+              <View style={styles.minutesValueRow}>
+                <Text style={styles.minutesValue}>127</Text>
+                <Text style={styles.minutesUnit}>min</Text>
+              </View>
+              <View style={styles.sparklineContainer}>
+                {/* Mock Sparkline */}
+                <View style={styles.sparkline} />
+              </View>
             </View>
           </Card>
         </View>
@@ -100,19 +109,22 @@ export const DashboardScreen: React.FC = () => {
         <Card variant="dark" style={styles.chartCard}>
           <View style={styles.chartHeader}>
             <View>
-              <Text variant="headline" color="#FFFFFF">Calories Burned:</Text>
-              <Text variant="h3" color="#FFFFFF" weight="700">450 <Text variant="subheadline" color="#FFFFFF">kcal</Text></Text>
+              <Text variant="headline" color="#FFFFFF" weight="600">Calories Burned:</Text>
+              <View style={styles.caloriesValueRow}>
+                <Text style={styles.caloriesValue}>450</Text>
+                <Text style={styles.caloriesUnit}>kcal</Text>
+              </View>
             </View>
             <View style={styles.chartIcon}>
               <Flame color={COLORS.primary} size={20} fill={COLORS.primary} />
             </View>
           </View>
-          
+
           <View style={styles.barsContainer}>
-            {[30, 50, 40, 60, 45, 80, 55].map((val, idx) => (
+            {[20, 35, 30, 45, 35, 70, 40].map((val, idx) => (
               <View key={idx} style={styles.barWrapper}>
                 <View style={[styles.bar, { height: val, backgroundColor: idx === 5 ? COLORS.primary : '#2C2C2E' }]} />
-                <Text variant="caption" color="#8E8E93" style={{ marginTop: 8 }}>
+                <Text variant="caption" color="#8E8E93" style={{ marginTop: 8, fontSize: 10 }}>
                   {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][idx]}
                 </Text>
               </View>
@@ -127,7 +139,7 @@ export const DashboardScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F7',
+    backgroundColor: '#FFFFFF',
   },
   scrollContent: {
     padding: SPACING.m,
@@ -136,38 +148,54 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     marginBottom: SPACING.xl,
+    marginTop: SPACING.s,
+  },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   avatar: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    marginBottom: SPACING.s,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    marginRight: SPACING.m,
+  },
+  headerText: {
+    justifyContent: 'center',
   },
   welcomeText: {
-    ...TYPOGRAPHY.h2,
-    fontWeight: '800',
+    fontSize: 24,
+    lineHeight: 28,
   },
   notificationBtn: {
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F2F2F7',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+  },
+  notificationDot: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: COLORS.error,
+    borderWidth: 1.5,
+    borderColor: '#F2F2F7',
   },
   workoutCard: {
     borderRadius: BORDER_RADIUS.xl,
     padding: SPACING.xl,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    height: 180,
+    height: 190,
     marginBottom: SPACING.l,
+    overflow: 'hidden',
   },
   workoutInfo: {
     flex: 1,
@@ -175,7 +203,19 @@ const styles = StyleSheet.create({
   },
   durationRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'baseline',
+    marginTop: -SPACING.s,
+  },
+  durationValue: {
+    fontSize: 48,
+    fontWeight: '800',
+    color: '#FFFFFF',
+  },
+  durationUnit: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#FFFFFF',
+    marginLeft: 4,
   },
   startBtn: {
     backgroundColor: COLORS.primary,
@@ -185,12 +225,12 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   workoutIcon: {
-    width: 100,
-    height: 100,
+    width: 120,
+    height: 120,
     resizeMode: 'contain',
     position: 'absolute',
-    right: 10,
-    bottom: 20,
+    right: -10,
+    bottom: 10,
   },
   statsRow: {
     flexDirection: 'row',
@@ -199,7 +239,7 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    height: 180,
+    height: 200,
     padding: SPACING.m,
     borderRadius: BORDER_RADIUS.xl,
   },
@@ -220,27 +260,39 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: SPACING.s,
   },
   ringText: {
     justifyContent: 'center',
     alignItems: 'center',
-    height: '100%',
-    width: '100%',
   },
   minutesContent: {
     flex: 1,
-    justifyContent: 'flex-end',
-    paddingBottom: SPACING.s,
+    justifyContent: 'space-between',
+    marginTop: SPACING.m,
+  },
+  minutesValueRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+  },
+  minutesValue: {
+    fontSize: 32,
+    fontWeight: '800',
+    color: '#FFFFFF',
+  },
+  minutesUnit: {
+    fontSize: 14,
+    color: '#FFFFFF',
+    marginLeft: 4,
+  },
+  sparklineContainer: {
+    height: 40,
+    justifyContent: 'center',
   },
   sparkline: {
-    height: 40,
+    height: 2,
     width: '100%',
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    borderRadius: BORDER_RADIUS.s,
-    marginTop: SPACING.s,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.3)',
+    backgroundColor: 'rgba(255,255,255,0.3)',
+    borderRadius: 1,
   },
   chartCard: {
     backgroundColor: '#000000',
@@ -251,6 +303,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: SPACING.xl,
+  },
+  caloriesValueRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    marginTop: SPACING.xs,
+  },
+  caloriesValue: {
+    fontSize: 28,
+    fontWeight: '800',
+    color: '#FFFFFF',
+  },
+  caloriesUnit: {
+    fontSize: 16,
+    color: '#FFFFFF',
+    marginLeft: 4,
   },
   chartIcon: {
     width: 40,
@@ -264,13 +331,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
-    height: 100,
+    height: 80,
   },
   barWrapper: {
     alignItems: 'center',
   },
   bar: {
-    width: 16,
-    borderRadius: 8,
+    width: 20,
+    borderRadius: 4,
   },
 });

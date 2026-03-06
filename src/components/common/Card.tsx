@@ -4,19 +4,29 @@ import { COLORS, BORDER_RADIUS, SPACING } from '../../constants/theme';
 
 interface CardProps {
   children: React.ReactNode;
-  variant?: 'light' | 'dark' | 'glass';
+  variant?: 'light' | 'dark' | 'purple' | 'orange' | 'grey' | 'darkGrey';
   style?: ViewStyle;
 }
 
-export const Card: React.FC<CardProps> = ({ children, variant, style }) => {
+export const Card: React.FC<CardProps> = ({ children, variant = 'light', style }) => {
   const isDark = useColorScheme() === 'dark';
-  const bgColor = variant === 'dark' ? COLORS.surface.dark : COLORS.surface.light;
+
+  const getBackgroundColor = () => {
+    switch (variant) {
+      case 'dark': return COLORS.surface.dark;
+      case 'purple': return COLORS.card.purple;
+      case 'orange': return COLORS.card.orange;
+      case 'grey': return COLORS.card.grey;
+      case 'darkGrey': return COLORS.card.darkGrey;
+      default: return isDark ? COLORS.surface.dark : COLORS.surface.light;
+    }
+  };
 
   return (
     <View
       style={[
         styles.base,
-        { backgroundColor: bgColor },
+        { backgroundColor: getBackgroundColor() },
         style,
       ]}
     >

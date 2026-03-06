@@ -1,9 +1,9 @@
 export const COLORS = {
-  primary: '#FF7F3F',
+  primary: '#FF8C4B', // Orange from design
   secondary: '#FFB18B',
-  accent: '#A081FF',
+  accent: '#7B61FF', // Purple from design
   background: {
-    light: '#F5F5F7',
+    light: '#F8F9FA',
     dark: '#000000',
   },
   surface: {
@@ -12,23 +12,24 @@ export const COLORS = {
   },
   text: {
     primary: {
-      light: '#000000',
+      light: '#1A1C1E',
       dark: '#FFFFFF',
     },
     secondary: {
       light: '#8E8E93',
       dark: '#8E8E93',
     },
-    accent: '#FF7F3F',
+    accent: '#FF8C4B',
   },
   success: '#34C759',
   warning: '#FFCC00',
   error: '#FF3B30',
   info: '#007AFF',
   card: {
-    purple: '#A081FF',
-    orange: '#FF7F3F',
+    purple: '#7B61FF',
+    orange: '#FF8C4B',
     grey: '#3A3A3C',
+    darkGrey: '#2C2C2E',
   },
 } as const;
 
@@ -51,37 +52,37 @@ export const BORDER_RADIUS = {
 export const TYPOGRAPHY = {
   h1: {
     fontSize: 34,
-    fontWeight: '700',
+    fontWeight: '800' as const,
     lineHeight: 41,
   },
   h2: {
     fontSize: 28,
-    fontWeight: '700',
+    fontWeight: '700' as const,
     lineHeight: 34,
   },
   h3: {
     fontSize: 22,
-    fontWeight: '700',
+    fontWeight: '700' as const,
     lineHeight: 28,
   },
   headline: {
     fontSize: 17,
-    fontWeight: '600',
+    fontWeight: '600' as const,
     lineHeight: 22,
   },
   body: {
     fontSize: 17,
-    fontWeight: '400',
+    fontWeight: '400' as const,
     lineHeight: 22,
   },
   subheadline: {
     fontSize: 15,
-    fontWeight: '400',
+    fontWeight: '400' as const,
     lineHeight: 20,
   },
   caption: {
     fontSize: 12,
-    fontWeight: '400',
+    fontWeight: '400' as const,
     lineHeight: 16,
   },
 } as const;

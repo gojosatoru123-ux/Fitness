@@ -8,8 +8,9 @@ import { ProgressScreen } from '../modules/progress/screens/ProgressScreen';
 import { NutritionScreen } from '../modules/nutrition/screens/NutritionScreen';
 import { ActivityScreen } from '../modules/activity/screens/ActivityScreen';
 import { WorkoutScreen } from '../modules/workouts/screens/WorkoutScreen';
+import { CalculatorsScreen } from '../modules/calculators/screens/CalculatorsScreen';
 import { COLORS } from '../constants/theme';
-import { Home, BarChart2, Activity, User, Coffee, Dumbbell } from 'lucide-react-native';
+import { Home, BarChart2, Activity, User, Coffee, Dumbbell, Calculator } from 'lucide-react-native';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -31,15 +32,15 @@ const MainTabNavigator = () => (
         if (route.name === 'Dashboard') return <Home color={color} size={size} />;
         if (route.name === 'Progress') return <BarChart2 color={color} size={size} />;
         if (route.name === 'Nutrition') return <Coffee color={color} size={size} />;
-        if (route.name === 'Activity') return <Activity color={color} size={size} />;
+        if (route.name === 'Calculators') return <Calculator color={color} size={size} />;
         if (route.name === 'Workouts') return <Dumbbell color={color} size={size} />;
       },
     })}
   >
     <Tab.Screen name="Dashboard" component={DashboardScreen} />
     <Tab.Screen name="Workouts" component={WorkoutScreen} />
-    <Tab.Screen name="Activity" component={ActivityScreen} />
     <Tab.Screen name="Nutrition" component={NutritionScreen} />
+    <Tab.Screen name="Calculators" component={CalculatorsScreen} />
     <Tab.Screen name="Progress" component={ProgressScreen} />
   </Tab.Navigator>
 );
