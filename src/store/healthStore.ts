@@ -1,18 +1,10 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import { MMKV } from 'react-native-mmkv';
-
-const storage = new MMKV();
-
-const mmkvStorage = {
-  setItem: (name: string, value: string) => storage.set(name, value),
-  getItem: (name: string) => storage.getString(name) ?? null,
-  removeItem: (name: string) => storage.delete(name),
-};
+import { createJSONStorage, persist } from 'zustand/middleware';
 
 export interface LogEntry {
   id: string;
-  date: string; // ISO format
+  date: string;
 }
 
 export interface FoodEntry extends LogEntry {
@@ -26,13 +18,13 @@ export interface FoodEntry extends LogEntry {
 }
 
 export interface WaterEntry extends LogEntry {
-  amount: number; // in ml
+  amount: number;
 }
 
 export interface ActivityEntry extends LogEntry {
   type: 'run' | 'walk' | 'cycle' | 'hike';
-  distance: number; // in km
-  duration: number; // in seconds
+  distance: number;
+  duration: number;
   calories: number;
   pace: string;
   route: Array<{ latitude: number; longitude: number }>;
@@ -54,13 +46,10 @@ interface HealthState {
   waterEntries: WaterEntry[];
   activityEntries: ActivityEntry[];
   workoutEntries: WorkoutEntry[];
-
   addFood: (entry: FoodEntry) => void;
   addWater: (entry: WaterEntry) => void;
   addActivity: (entry: ActivityEntry) => void;
   addWorkout: (entry: WorkoutEntry) => void;
-
-  // Helpers
   getDailyCalories: (date: string) => number;
   getDailyWater: (date: string) => number;
   getDailyMacros: (date: string) => { protein: number; carbs: number; fat: number };
@@ -109,7 +98,7 @@ export const useHealthStore = create<HealthState>()(
     }),
     {
       name: 'health-storage',
-      storage: createJSONStorage(() => mmkvStorage),
+      storage: createJSONStorage(() => AsyncStorage),
     }
   )
 );

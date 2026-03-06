@@ -1,11 +1,11 @@
 import React from 'react';
-import { Text as RNText, TextProps, StyleSheet, useColorScheme } from 'react-native';
+import { Text as RNText, TextProps, useColorScheme } from 'react-native';
 import { COLORS, TYPOGRAPHY } from '../../constants/theme';
 
 interface CustomTextProps extends TextProps {
   variant?: keyof typeof TYPOGRAPHY;
   color?: string;
-  weight?: '400' | '600' | '700';
+  weight?: '400' | '600' | '700' | '800'; // Added '800'
   center?: boolean;
 }
 

@@ -1,9 +1,21 @@
+import { Dumbbell, Heart, Play, User, Zap } from 'lucide-react-native';
 import React from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Image, FlatList, SafeAreaView } from 'react-native';
-import { Text } from '../../../components/common/Text';
+import {
+  Dimensions // 1. Added Dimensions import
+  ,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import { Card } from '../../../components/common/Card';
-import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS } from '../../../constants/theme';
-import { Dumbbell, Heart, Zap, User, ChevronRight, Play } from 'lucide-react-native';
+import { Text } from '../../../components/common/Text';
+import { BORDER_RADIUS, COLORS, SPACING } from '../../../constants/theme';
+
+// 2. Define the width constant for the grid calculation
+const { width } = Dimensions.get('window');
 
 const categories = [
   { id: 'strength', name: 'Strength', icon: Dumbbell, color: '#A081FF' },
@@ -130,14 +142,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     padding: SPACING.m,
-    gap: SPACING.m,
+    justifyContent: 'space-between', // Changed gap to space-between for cleaner grid
   },
   catCard: {
-    width: (width - SPACING.m * 3) / 2,
+    // 3. The logic now works because 'width' is defined at the top
+    width: (width - SPACING.m * 3) / 2, 
     height: 100,
     borderRadius: BORDER_RADIUS.xl,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: SPACING.m, // Added to prevent cards touching vertically
   },
   sectionHeader: {
     flexDirection: 'row',

@@ -1,10 +1,20 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, Dimensions } from 'react-native';
-import { Text } from '../../../components/common/Text';
+import {
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View
+} from 'react-native';
+// Use the modern SafeAreaView to fix the deprecation warning
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '../../../components/common/Button';
+import { Card } from '../../../components/common/Card';
 import { ProgressRing } from '../../../components/common/ProgressRing';
-import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS } from '../../../constants/theme';
-import { ChevronLeft, Plus, Flame } from 'lucide-react-native';
+import { Text } from '../../../components/common/Text';
+import { BORDER_RADIUS, COLORS, SPACING } from '../../../constants/theme';
+// Added Droplet to the imports to fix the ReferenceError
+import { ChevronLeft, Droplet, Flame, Plus } from 'lucide-react-native';
 
 const { width } = Dimensions.get('window');
 
@@ -73,7 +83,7 @@ export const ProgressScreen: React.FC = () => {
           </View>
         </View>
 
-        {/* Stats Summary */}
+        {/* Stats Summary Row */}
         <View style={styles.statsSummaryRow}>
           <View style={styles.statSummaryItem}>
             <ProgressRing
@@ -244,7 +254,6 @@ const styles = StyleSheet.create({
   },
   calorieValue: {
     fontSize: 48,
-    lineHeight: 56,
   },
   statsSummaryRow: {
     flexDirection: 'row',
@@ -267,7 +276,6 @@ const styles = StyleSheet.create({
   },
   actionBtn: {
     flex: 1,
-    height: 56,
   },
   metricsHeader: {
     flexDirection: 'row',
@@ -308,8 +316,6 @@ const styles = StyleSheet.create({
     borderRadius: BORDER_RADIUS.l,
     padding: SPACING.m,
     marginBottom: SPACING.s,
-    shadowOpacity: 0,
-    elevation: 0,
   },
   insightRow: {
     flexDirection: 'row',

@@ -1,6 +1,12 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
-import { COLORS, BORDER_RADIUS, SPACING, TYPOGRAPHY } from '../../constants/theme';
+import {
+  StyleProp,
+  StyleSheet,
+  Text,
+  TouchableOpacity, // Added
+  ViewStyle
+} from 'react-native';
+import { BORDER_RADIUS, COLORS, SPACING, TYPOGRAPHY } from '../../constants/theme';
 
 interface ButtonProps {
   label: string;
@@ -8,7 +14,7 @@ interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
   fullWidth?: boolean;
   disabled?: boolean;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>; // Updated from ViewStyle to StyleProp<ViewStyle>
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -49,7 +55,7 @@ export const Button: React.FC<ButtonProps> = ({
         getButtonStyle(),
         fullWidth && { width: '100%' },
         disabled && { opacity: 0.5 },
-        style,
+        style, // Now correctly accepts arrays or single objects
       ]}
     >
       <Text style={[styles.baseText, getTextStyle()]}>{label}</Text>
@@ -69,30 +75,16 @@ const styles = StyleSheet.create({
     ...TYPOGRAPHY.headline,
     fontWeight: '700',
   },
-  primary: {
-    backgroundColor: COLORS.primary,
-  },
-  primaryText: {
-    color: '#FFFFFF',
-  },
-  secondary: {
-    backgroundColor: COLORS.secondary,
-  },
-  secondaryText: {
-    color: '#FFFFFF',
-  },
+  primary: { backgroundColor: COLORS.primary },
+  primaryText: { color: '#FFFFFF' },
+  secondary: { backgroundColor: COLORS.secondary },
+  secondaryText: { color: '#FFFFFF' },
   outline: {
     borderWidth: 1,
     borderColor: COLORS.primary,
     backgroundColor: 'transparent',
   },
-  outlineText: {
-    color: COLORS.primary,
-  },
-  ghost: {
-    backgroundColor: 'transparent',
-  },
-  ghostText: {
-    color: COLORS.primary,
-  },
+  outlineText: { color: COLORS.primary },
+  ghost: { backgroundColor: 'transparent' },
+  ghostText: { color: COLORS.primary },
 });

@@ -30,7 +30,7 @@ export const COLORS = {
     orange: '#FF7F3F',
     grey: '#3A3A3C',
   },
-};
+} as const;
 
 export const SPACING = {
   xs: 4,
@@ -39,14 +39,14 @@ export const SPACING = {
   l: 24,
   xl: 32,
   xxl: 48,
-};
+} as const;
 
 export const BORDER_RADIUS = {
   s: 8,
   m: 16,
   l: 24,
   xl: 32,
-};
+} as const;
 
 export const TYPOGRAPHY = {
   h1: {
@@ -84,4 +84,4 @@ export const TYPOGRAPHY = {
     fontWeight: '400',
     lineHeight: 16,
   },
-};
+} as const;
